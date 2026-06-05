@@ -1,0 +1,28 @@
+# База данных (не загружаем)
+database.db
+*.db
+
+# Папка с фото (копии)
+images/
+__pycache__/
+*.pyc
+
+# Файлы IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Временные файлы
+*.log
+*.tmp
+check/
+clear/
+
+# Папка с исходными фото 
+images_source/  
+
+# Файлы миграций 
+migrate_*.py
+fix_*.py
+check_*.py
