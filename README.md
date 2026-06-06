@@ -140,40 +140,41 @@ text
 
     Импорт заказов (номера, товары, даты, статусы, адреса)
 
-    База данных
-    Таблицы
+#    База данных
+##    Таблицы
     Таблица	Описание
     users	Пользователи (id, login, password, full_name, role)
     suppliers	Поставщики (id, name)
     products	Товары (id, article, name, category, description, manufacturer, supplier_id, price, unit, quantity, discount, image_path)
     orders	Заказы (id, article, status, pickup_address, order_date, issue_date)
     order_products	Связь заказов и товаров (order_id, product_id, quantity)
-    Связи
+##   Связи
     products.supplier_id → suppliers.id
 
     order_products.order_id → orders.id
 
     order_products.product_id → products.id
 
-    Структура Excel файлов для импорта
-    товар.xlsx
+#    Структура Excel файлов для импорта
+###   товар.xlsx
     A	B	C	D	E	F	G	H	I	J	K
     Артикул	Наименование	Ед.изм.	Цена	Поставщик	Производитель	Категория	Скидка	Кол-во	Описание	Фото
-    пользователи.xlsx
+###    пользователи.xlsx
     A	B	C	D
     Роль сотрудника	ФИО	Логин	Пароль
-    заказ.xlsx
+###    заказ.xlsx
     A	B	C	D	E	F	G	H
     Номер заказа	Артикул заказа	Дата заказа	Дата доставки	Адрес	ФИО клиента	Код	Статус
     В колонке B товары указываются как "артикул, количество, артикул, количество..."
 
-    Сборка исполняемого файла
-    bash
+##    Сборка исполняемого файла
+```    bash
     pip install pyinstaller
-    pyinstaller --noconfirm --windowed --onefile --name ToysShop --add-data "windows;windows" --add-data "data;data" --add-data "images_source;images_source" main.py
+    pyinstaller --noconfirm --windowed --onefile --name ToysShop --add-data "windows;windows" --add-data "data;data" --add-data "images_source;images_source" main.py 
+```
     Исполняемый файл будет в папке dist/
 
-    Примечания
+##    Примечания
     База данных database.db создаётся автоматически при первом запуске
 
     Изображения копируются из images_source/ в images/ при импорте
