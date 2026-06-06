@@ -80,7 +80,7 @@ class ProductForm(ctk.CTkToplevel):
         categories = [row[0] for row in cursor.fetchall()]
         conn.close()
         
-        # Если категорий нет, добавляем стандартные
+        #если категорий нет добавляем стандартные
         if not categories:
             categories = ["Игровой набор", "Конструктор", "Машинка", "Детский музыкальный инструмент"]
         
@@ -100,12 +100,12 @@ class ProductForm(ctk.CTkToplevel):
         self.main_frame = ctk.CTkScrollableFrame(self, fg_color="#FFFFFF")
         self.main_frame.pack(pady=20, padx=20, fill="both", expand=True)
         
-        # Наименование
+        #наименование
         ctk.CTkLabel(self.main_frame, text="Наименование:", font=("Arial", 12)).pack(anchor="w", pady=2)
         self.name_entry = ctk.CTkEntry(self.main_frame, width=400, font=("Arial", 12))
         self.name_entry.pack(pady=5, fill="x")
         
-        # Категория (выпадающий список)
+        #категория (выпадающий список)
         ctk.CTkLabel(self.main_frame, text="Категория:", font=("Arial", 12)).pack(anchor="w", pady=2)
         self.category_var = ctk.StringVar()
         self.category_combo = ctk.CTkComboBox(
@@ -117,22 +117,22 @@ class ProductForm(ctk.CTkToplevel):
         )
         self.category_combo.pack(pady=5, fill="x")
         
-        # Артикул (добавлен согласно заданию)
+        #артикул 
         ctk.CTkLabel(self.main_frame, text="Артикул:", font=("Arial", 12)).pack(anchor="w", pady=2)
         self.article_entry = ctk.CTkEntry(self.main_frame, width=400, font=("Arial", 12), placeholder_text="Уникальный артикул товара")
         self.article_entry.pack(pady=5, fill="x")
         
-        # Описание
+        #описание
         ctk.CTkLabel(self.main_frame, text="Описание:", font=("Arial", 12)).pack(anchor="w", pady=2)
         self.description_text = ctk.CTkTextbox(self.main_frame, height=80, width=400, font=("Arial", 12))
         self.description_text.pack(pady=5, fill="x")
         
-        # Производитель
+        #производитель
         ctk.CTkLabel(self.main_frame, text="Производитель:", font=("Arial", 12)).pack(anchor="w", pady=2)
         self.manufacturer_entry = ctk.CTkEntry(self.main_frame, width=400, font=("Arial", 12))
         self.manufacturer_entry.pack(pady=5, fill="x")
         
-        # Поставщик (выпадающий список)
+        #поставщик тоже список
         ctk.CTkLabel(self.main_frame, text="Поставщик:", font=("Arial", 12)).pack(anchor="w", pady=2)
         self.supplier_var = ctk.StringVar()
         self.supplier_combo = ctk.CTkComboBox(
@@ -144,27 +144,27 @@ class ProductForm(ctk.CTkToplevel):
         )
         self.supplier_combo.pack(pady=5, fill="x")
         
-        # Цена
+        #цена
         ctk.CTkLabel(self.main_frame, text="Цена:", font=("Arial", 12)).pack(anchor="w", pady=2)
         self.price_entry = ctk.CTkEntry(self.main_frame, width=400, font=("Arial", 12))
         self.price_entry.pack(pady=5, fill="x")
         
-        # Единица измерения
+        #ед измерения
         ctk.CTkLabel(self.main_frame, text="Единица измерения:", font=("Arial", 12)).pack(anchor="w", pady=2)
         self.unit_entry = ctk.CTkEntry(self.main_frame, width=400, font=("Arial", 12), placeholder_text="шт, кг, л...")
         self.unit_entry.pack(pady=5, fill="x")
         
-        # Количество на складе
+        #кол на складе
         ctk.CTkLabel(self.main_frame, text="Количество на складе:", font=("Arial", 12)).pack(anchor="w", pady=2)
         self.quantity_entry = ctk.CTkEntry(self.main_frame, width=400, font=("Arial", 12))
         self.quantity_entry.pack(pady=5, fill="x")
         
-        # Скидка
+        #скидка
         ctk.CTkLabel(self.main_frame, text="Скидка (%):", font=("Arial", 12)).pack(anchor="w", pady=2)
         self.discount_entry = ctk.CTkEntry(self.main_frame, width=400, font=("Arial", 12), placeholder_text="0-100")
         self.discount_entry.pack(pady=5, fill="x")
         
-        # Кнопка выбора изображения
+        #кнопка выбора изображения
         self.image_button = ctk.CTkButton(
             self.main_frame,
             text="Выбрать изображение",
@@ -176,11 +176,11 @@ class ProductForm(ctk.CTkToplevel):
         )
         self.image_button.pack(pady=10)
         
-        # Поле для отображения фото
+        #поле для отображения фото
         self.photo_label = ctk.CTkLabel(self.main_frame, text="", width=100, height=100)
         self.photo_label.pack(pady=10)
         
-        # Подсказка по размеру фото
+        #подсказка по размеру фото
         ctk.CTkLabel(
             self.main_frame, 
             text="Размер фото не должен превышать 300x200 пикселей", 
@@ -197,7 +197,7 @@ class ProductForm(ctk.CTkToplevel):
         if file_path:
             try:
                 img = Image.open(file_path)
-                # Проверка размера согласно заданию: 300x200
+                #проверка размера 
                 if img.width > 300 or img.height > 200:
                     messagebox.showerror("Ошибка", "Изображение не должно превышать 300x200 пикселей")
                     return
@@ -205,12 +205,12 @@ class ProductForm(ctk.CTkToplevel):
                 messagebox.showerror("Ошибка", f"Не удалось открыть изображение: {e}")
                 return
             
-            # Сохраняем новое фото
+            #сохраняем новое фото
             os.makedirs('images', exist_ok=True)
             filename = os.path.basename(file_path)
             dest_path = os.path.join('images', filename)
             
-            # Если фото уже есть и оно отличается от нового - удаляем старое
+            #если фото уже есть и оно отличается от нового удаляем старое
             if self.old_image_path and self.old_image_path != dest_path and os.path.exists(self.old_image_path):
                 try:
                     os.remove(self.old_image_path)
@@ -219,7 +219,6 @@ class ProductForm(ctk.CTkToplevel):
             
             shutil.copy2(file_path, dest_path)
             
-            # Показываем фото на форме
             img = Image.open(dest_path)
             img = img.resize((100, 100))
             photo = ctk.CTkImage(light_image=img, dark_image=img, size=(100, 100))
@@ -244,8 +243,7 @@ class ProductForm(ctk.CTkToplevel):
         conn.close()
         
         if product:
-            # product: id, name, category, description, manufacturer, supplier_name, 
-            #          price, unit, quantity, discount, image_path, article
+
             self.name_entry.insert(0, product[1] if product[1] else "")
             self.category_var.set(product[2] if product[2] else "")
             self.description_text.insert("1.0", product[3] if product[3] else "")
@@ -259,7 +257,7 @@ class ProductForm(ctk.CTkToplevel):
             self.old_image_path = self.image_path
             self.article_entry.insert(0, product[11] if product[11] else "")
             
-            # Показываем фото, если есть
+            #показываем фото если есть
             if self.image_path and os.path.exists(self.image_path):
                 try:
                     img = Image.open(self.image_path)
@@ -280,7 +278,7 @@ class ProductForm(ctk.CTkToplevel):
         unit = self.unit_entry.get().strip()
         article = self.article_entry.get().strip()
         
-        # Проверка обязательных полей
+        #проверка обязательных полей
         if not name:
             messagebox.showerror("Ошибка", "Наименование товара обязательно")
             return
@@ -293,7 +291,7 @@ class ProductForm(ctk.CTkToplevel):
             messagebox.showerror("Ошибка", "Артикул товара обязателен")
             return
         
-        # Проверка цены
+        #проверка цены
         try:
             price = float(self.price_entry.get())
             if price < 0:
@@ -303,7 +301,7 @@ class ProductForm(ctk.CTkToplevel):
             messagebox.showerror("Ошибка", "Введите корректную цену")
             return
         
-        # Проверка количества
+        #проверка кол-ва
         try:
             quantity = int(self.quantity_entry.get())
             if quantity < 0:
@@ -313,7 +311,7 @@ class ProductForm(ctk.CTkToplevel):
             messagebox.showerror("Ошибка", "Введите корректное количество")
             return
         
-        # Проверка скидки
+        #проверка скидки
         try:
             discount = float(self.discount_entry.get()) if self.discount_entry.get() else 0
             if discount < 0 or discount > 100:
@@ -322,7 +320,7 @@ class ProductForm(ctk.CTkToplevel):
         except ValueError:
             discount = 0
         
-        # Проверка артикула на уникальность (при добавлении или если артикул изменился)
+        #проверка артикула на уникальность
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
         
@@ -339,7 +337,7 @@ class ProductForm(ctk.CTkToplevel):
                 conn.close()
                 return
         
-        # Находим supplier_id по имени
+        #находим саплиер id по имени
         supplier_id = None
         if supplier_name:
             cursor.execute('SELECT id FROM suppliers WHERE name = ?', (supplier_name,))
@@ -347,13 +345,13 @@ class ProductForm(ctk.CTkToplevel):
             if sup:
                 supplier_id = sup[0]
             else:
-                # Если поставщика нет, создаём нового
+                #если поставщика нет создаём нового
                 cursor.execute('INSERT INTO suppliers (name) VALUES (?)', (supplier_name,))
                 supplier_id = cursor.lastrowid
         
-        # Сохраняем товар
+        #cохраняем товар
         if self.product_id:
-            # Обновление
+            #обновление
             cursor.execute('''
                 UPDATE products 
                 SET name=?, category=?, description=?, manufacturer=?, supplier_id=?,
@@ -362,7 +360,7 @@ class ProductForm(ctk.CTkToplevel):
             ''', (name, category, description, manufacturer, supplier_id,
                   price, unit, quantity, discount, self.image_path, article, self.product_id))
         else:
-            # Добавление
+            #добавление
             cursor.execute('''
                 INSERT INTO products (name, category, description, manufacturer, supplier_id,
                                     price, unit, quantity, discount, image_path, article)

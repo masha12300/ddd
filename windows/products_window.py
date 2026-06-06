@@ -13,14 +13,14 @@ class ProductsWindow(ctk.CTk):
         
         self.user_id = user_id
         self.full_name = full_name
-        self.role = role  # 'admin', 'manager', 'client', 'guest'
+        self.role = role 
         self.product_cards = {}
         
         self.title(f"Магазин игрушек - {full_name if full_name else 'Гость'}")
         self.geometry("1300x700")
         self.configure(fg_color="#FFFFFF")
         
-        # ФИО в правом углу
+        #ФИО в правом углу
         self.user_label = ctk.CTkLabel(
             self,
             text=f"Пользователь: {full_name if full_name else 'Гость'}",
@@ -32,11 +32,11 @@ class ProductsWindow(ctk.CTk):
         )
         self.user_label.pack(anchor="ne", padx=10, pady=10)
         
-        # Поиск и фильтры (только для менеджера и админа)
+        #поиск и фильтры только для менеджера и админа
         if role in ['manager', 'admin']:
             self.create_search_filters()
         
-        # Контейнер для карточек товаров
+        #контейнер для карточек товаров
         self.products_container = ctk.CTkScrollableFrame(
             self, 
             fg_color="#FFFFFF",
@@ -44,10 +44,10 @@ class ProductsWindow(ctk.CTk):
         )
         self.products_container.pack(fill="both", expand=True, padx=10, pady=10)
         
-        # Кнопки управления
+        #кнопки управления
         self.create_buttons()
         
-        # Загружаем товары
+        #загружаем товары
         self.load_products()
     
     def get_suppliers_list(self):
@@ -64,13 +64,13 @@ class ProductsWindow(ctk.CTk):
         self.search_frame = ctk.CTkFrame(self, fg_color="#ABCFFC", corner_radius=10)
         self.search_frame.pack(fill="x", padx=10, pady=5)
         
-        # Поиск
+        #поиск
         ctk.CTkLabel(self.search_frame, text="Поиск:", font=("Arial", 12)).pack(side="left", padx=5)
         self.search_entry = ctk.CTkEntry(self.search_frame, width=300, font=("Arial", 12), placeholder_text="Название, категория, описание...")
         self.search_entry.pack(side="left", padx=5)
         self.search_entry.bind('<KeyRelease>', lambda e: self.load_products())
         
-        # Фильтр по поставщику (выпадающий список)
+        #фильтр по поставщику
         ctk.CTkLabel(self.search_frame, text="Поставщик:", font=("Arial", 12)).pack(side="left", padx=20)
         self.supplier_var = ctk.StringVar(value="Все поставщики")
         self.supplier_combo = ctk.CTkComboBox(
@@ -83,7 +83,7 @@ class ProductsWindow(ctk.CTk):
         )
         self.supplier_combo.pack(side="left", padx=5)
         
-        # Сортировка
+        #сортировка
         ctk.CTkLabel(self.search_frame, text="Сортировка:", font=("Arial", 12)).pack(side="left", padx=20)
         self.sort_var = ctk.StringVar(value="Без сортировки")
         self.sort_combo = ctk.CTkComboBox(
@@ -111,7 +111,7 @@ class ProductsWindow(ctk.CTk):
         elif self.role == 'manager':
             ctk.CTkButton(self.button_frame, text="Заказы", command=self.open_orders, fg_color="#546F94").pack(side="left", padx=5)
         
-        # Кнопка "Назад" для всех
+        #кнопка назад
         ctk.CTkButton(self.button_frame, text="Выход", command=self.logout, fg_color="#ABCFFC", text_color="#000000").pack(side="right", padx=5)
     
     def load_products(self):
@@ -123,7 +123,7 @@ class ProductsWindow(ctk.CTk):
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
         
-        #Для гостя и клиента 
+        #для гостя и клиента 
         if self.role in ['guest', 'client']:
             query = '''
                 SELECT p.id, p.name, p.category, p.description, p.manufacturer, 
@@ -134,7 +134,7 @@ class ProductsWindow(ctk.CTk):
             '''
             cursor.execute(query)
         else:
-            # Для менеджера и админа - с фильтрацией и сортировкой
+            #для менеджера и админа
             query = '''
                 SELECT p.id, p.name, p.category, p.description, p.manufacturer, 
                        s.name as supplier_name, p.price, p.unit, p.quantity, p.discount, p.image_path
@@ -144,18 +144,18 @@ class ProductsWindow(ctk.CTk):
             '''
             params = []
             
-            # Поиск
+            #поиск
             if hasattr(self, 'search_entry') and self.search_entry.get():
                 search = f"%{self.search_entry.get()}%"
                 query += ' AND (p.name LIKE ? OR p.category LIKE ? OR p.description LIKE ? OR p.manufacturer LIKE ?)'
                 params.extend([search, search, search, search])
             
-            # Фильтр по поставщику (выпадающий список)
+            #фильтр по поставщику 
             if hasattr(self, 'supplier_var') and self.supplier_var.get() and self.supplier_var.get() != "Все поставщики":
                 query += ' AND s.name = ?'
                 params.append(self.supplier_var.get())
             
-            # Сортировка
+            #сортировка
             if hasattr(self, 'sort_var') and self.sort_var.get():
                 if self.sort_var.get() == "Цена ↑":
                     query += ' ORDER BY p.price ASC'
@@ -175,7 +175,7 @@ class ProductsWindow(ctk.CTk):
         rows = cursor.fetchall()
         conn.close()
         
-        # Создаём карточки товаров (3 колонки)
+        #создаём карточки товаров
         for idx, row in enumerate(rows):
             product_id, name, category, description, manufacturer, supplier_name, price, unit, quantity, discount, image_path = row
             
@@ -206,7 +206,7 @@ class ProductsWindow(ctk.CTk):
         card.pack_propagate(False)  
         card.configure(height=180)   
         
-        # Подсветка фона
+        #подсветка фона
         if quantity == 0:
             card.configure(fg_color="#ADD8E6")  
         elif discount > 17:
@@ -216,7 +216,6 @@ class ProductsWindow(ctk.CTk):
         left_frame.pack(side="left", padx=10, pady=10)
         left_frame.pack_propagate(False)
         
-        # Фото
         photo_image = self.load_photo(image_path)
         if photo_image:
             photo_label = ctk.CTkLabel(left_frame, image=photo_image, text="")
@@ -379,7 +378,6 @@ class ProductsWindow(ctk.CTk):
                 command=lambda pid=product_id: self.delete_product_by_id(pid)
             ).pack(side="left", padx=2)
         
-        #Двойной клик для редактирования(для админа)
         if self.role == 'admin':
             for widget in [card, left_frame, center_frame, right_frame]:
                 widget.bind("<Double-Button-1>", lambda e, pid=product_id: self.edit_product_by_id(pid))

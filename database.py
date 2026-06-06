@@ -9,7 +9,7 @@ def create_database():
     with sqlite3.connect(DB_NAME) as conn:
         cursor = conn.cursor()
         
-        # 1. Таблица пользователей
+        #пользователи
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -20,7 +20,7 @@ def create_database():
             )
         ''')
         
-        # 2. Таблица поставщиков
+        #поставщики
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS suppliers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,7 +28,7 @@ def create_database():
             )
         ''')
         
-        # 3. Таблица товаров (с артикулом)
+        #товары
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS products (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +47,7 @@ def create_database():
             )
         ''')
         
-        # 4. Таблица заказов
+        #заказы
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS orders (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,7 +59,7 @@ def create_database():
             )
         ''')
         
-        # 5. Таблица связи заказов и товаров
+        #таблица связи заказов и товаров
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS order_products (
                 order_id INTEGER,
@@ -70,7 +70,7 @@ def create_database():
             )
         ''')
         
-        # 6. Добавляем тестовых пользователей
+        #тестовые пользователи
         users = [
             ('admin', 'admin123', 'Администратор Системы', 'admin'),
             ('manager', 'manager123', 'Петров Иван Сергеевич', 'manager'),
@@ -114,7 +114,7 @@ def import_products_from_excel(file_path):
             if not row or not row[1]:
                 continue
             
-            # Читаем артикул из колонки A (индекс 0)
+            #читаем артикул из колонки A индекс 0
             article = str(row[0]).strip() if row[0] else ""
             name = str(row[1]).strip()
             unit = str(row[2]).strip() if row[2] else "шт"
@@ -141,7 +141,6 @@ def import_products_from_excel(file_path):
             description = str(row[9]).strip() if row[9] else ""
             image_filename = str(row[10]).strip() if row[10] else ""
             
-            # Обработка фото
             image_path = ""
             if image_filename:
                 source_image = None
@@ -164,7 +163,7 @@ def import_products_from_excel(file_path):
             if not name:
                 continue
             
-            # Получаем или создаём поставщика
+            #получаем или создаём поставщика
             supplier_id = None
             if supplier_name:
                 cursor.execute('SELECT id FROM suppliers WHERE name = ?', (supplier_name,))
@@ -175,7 +174,7 @@ def import_products_from_excel(file_path):
                     cursor.execute('INSERT INTO suppliers (name) VALUES (?)', (supplier_name,))
                     supplier_id = cursor.lastrowid
             
-            # Проверяем дубликаты по артикулу
+            #проверяем дубликаты по артикулу
             if article:
                 cursor.execute('SELECT id FROM products WHERE article = ?', (article,))
                 if cursor.fetchone():
@@ -212,12 +211,12 @@ def import_orders_from_excel(file_path):
         print(f"Ошибка чтения файла: {e}")
         return 0
     
-    # Загружаем адреса из файла пункты_выдачи.xlsx
+    #загружаем адреса из файла пункты_выдачи.xlsx
     pickup_addresses = {}
     try:
         addr_workbook = openpyxl.load_workbook('data/пункты_выдачи.xlsx')
         addr_sheet = addr_workbook.active
-        # Пронумеруем адреса с 1
+        #нумерация адреса с 1
         for idx, row in enumerate(addr_sheet.iter_rows(min_row=1, values_only=True), start=1):
             if row and row[0]:
                 pickup_addresses[str(idx)] = str(row[0])
@@ -236,7 +235,7 @@ def import_orders_from_excel(file_path):
             if not row or not row[0]:
                 continue
             
-            # Читаем данные заказа
+            #читаем данные заказа
             order_num = str(row[0]).strip() if row[0] else ""
             products_str = str(row[1]) if row[1] else ""
             order_date = row[2] if row[2] else ""
@@ -249,17 +248,17 @@ def import_orders_from_excel(file_path):
             if not order_num:
                 continue
             
-            # Подставляем полный адрес по номеру
+            #подставляем полный адрес по номеру
             pickup_address = pickup_addresses.get(address_num, address_num)
             
-            # Проверяем, есть ли уже такой заказ
+            #проверяем, есть ли уже такой заказ
             cursor.execute('SELECT id FROM orders WHERE article = ?', (order_num,))
             if cursor.fetchone():
                 print(f"Заказ {order_num} уже существует, пропускаем")
                 skipped_orders += 1
                 continue
             
-            # Добавляем заказ
+            #добавляем заказ
             cursor.execute('''
                 INSERT INTO orders (article, status, pickup_address, order_date, issue_date)
                 VALUES (?, ?, ?, ?, ?)
@@ -267,7 +266,7 @@ def import_orders_from_excel(file_path):
             
             order_id = cursor.lastrowid
             
-            # Разбираем товары
+            #разбираем товары
             if products_str:
                 parts = [p.strip() for p in products_str.split(',')]
                 
@@ -320,7 +319,7 @@ def import_users_from_excel(file_path):
     added = 0
     skipped = 0
     
-    # Определяем заголовки
+    #определяем заголовки
     headers = {}
     for col in range(1, sheet.max_column + 1):
         header = sheet.cell(1, col).value

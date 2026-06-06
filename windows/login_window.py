@@ -10,10 +10,9 @@ class LoginWindow(ctk.CTk):
         self.title("Авторизация - Магазин игрушек")
         self.geometry("400x350")
         
-        # Установка цвета фона (по заданию: #FFFFFF)
+        #фон
         self.configure(fg_color="#FFFFFF")
         
-        # Заголовок
         self.title_label = ctk.CTkLabel(
             self, 
             text="Добро пожаловать!", 
@@ -22,7 +21,7 @@ class LoginWindow(ctk.CTk):
         )
         self.title_label.pack(pady=20)
         
-        # Поле для логина
+        #поле для логина
         self.login_entry = ctk.CTkEntry(
             self, 
             placeholder_text="Логин",
@@ -32,7 +31,7 @@ class LoginWindow(ctk.CTk):
         )
         self.login_entry.pack(pady=10)
         
-        # Поле для пароля
+        #поле для пароля
         self.password_entry = ctk.CTkEntry(
             self, 
             placeholder_text="Пароль",
@@ -43,7 +42,7 @@ class LoginWindow(ctk.CTk):
         )
         self.password_entry.pack(pady=10)
         
-        # Кнопка "Войти" (цвет акцента: #546F94)
+        #кнопка войти 
         self.login_button = ctk.CTkButton(
             self,
             text="Войти",
@@ -56,7 +55,7 @@ class LoginWindow(ctk.CTk):
         )
         self.login_button.pack(pady=10)
         
-        # Кнопка "Продолжить как гость"
+        #кнопка для гостя
         self.guest_button = ctk.CTkButton(
             self,
             text="Продолжить как гость",
@@ -70,7 +69,6 @@ class LoginWindow(ctk.CTk):
         )
         self.guest_button.pack(pady=5)
         
-        # Надпись с подсказкой
         self.hint_label = ctk.CTkLabel(
             self,
             text="Тестовый вход: admin / admin123",

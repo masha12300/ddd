@@ -14,7 +14,7 @@ class OrdersWindow(ctk.CTkToplevel):
         self.geometry("900x500")
         self.configure(fg_color="#FFFFFF")
         
-        # Таблица заказов
+        #таблица заказов
         self.tree_frame = ctk.CTkFrame(self, fg_color="#FFFFFF")
         self.tree_frame.pack(fill="both", expand=True, padx=10, pady=10)
         
@@ -39,7 +39,7 @@ class OrdersWindow(ctk.CTkToplevel):
         
         self.load_orders()
         
-        # Кнопки (только для админа)
+        #кнопки для админа
         if role == 'admin':
             self.button_frame = ctk.CTkFrame(self, fg_color="#FFFFFF")
             self.button_frame.pack(fill="x", padx=10, pady=10)
@@ -143,12 +143,12 @@ class OrdersWindow(ctk.CTkToplevel):
         form.geometry("500x450")
         form.configure(fg_color="#FFFFFF")
         
-        # Артикул
+        #артикул
         ctk.CTkLabel(form, text="Артикул:", font=("Comic Sans MS", 12)).pack(anchor="w", padx=20, pady=5)
         article_entry = ctk.CTkEntry(form, width=400, font=("Comic Sans MS", 12))
         article_entry.pack(padx=20, pady=5)
         
-        # Статус
+        #статус
         ctk.CTkLabel(form, text="Статус:", font=("Comic Sans MS", 12)).pack(anchor="w", padx=20, pady=5)
         status_var = ctk.StringVar(value="Новый")
         status_combo = ctk.CTkComboBox(
@@ -157,22 +157,22 @@ class OrdersWindow(ctk.CTkToplevel):
         )
         status_combo.pack(padx=20, pady=5)
         
-        # Адрес выдачи
+        #адрес выдачи
         ctk.CTkLabel(form, text="Адрес пункта выдачи:", font=("Comic Sans MS", 12)).pack(anchor="w", padx=20, pady=5)
         address_entry = ctk.CTkEntry(form, width=400, font=("Comic Sans MS", 12))
         address_entry.pack(padx=20, pady=5)
         
-        # Дата заказа
+        #дата заказа
         ctk.CTkLabel(form, text="Дата заказа (ГГГГ-ММ-ДД):", font=("Comic Sans MS", 12)).pack(anchor="w", padx=20, pady=5)
         order_date_entry = ctk.CTkEntry(form, width=400, font=("Comic Sans MS", 12), placeholder_text=datetime.now().strftime("%Y-%m-%d"))
         order_date_entry.pack(padx=20, pady=5)
         
-        # Дата выдачи
+        #дата выдачи
         ctk.CTkLabel(form, text="Дата выдачи (ГГГГ-ММ-ДД):", font=("Comic Sans MS", 12)).pack(anchor="w", padx=20, pady=5)
         issue_date_entry = ctk.CTkEntry(form, width=400, font=("Comic Sans MS", 12))
         issue_date_entry.pack(padx=20, pady=5)
         
-        # Если редактируем — загружаем данные
+        #если редактируем — загружаем данные
         if order_id:
             conn = sqlite3.connect('database.db')
             cursor = conn.cursor()
@@ -187,7 +187,7 @@ class OrdersWindow(ctk.CTkToplevel):
                 if order[5]:
                     issue_date_entry.insert(0, order[5])
         
-        # Кнопки
+        #кнопки
         btn_frame = ctk.CTkFrame(form, fg_color="#FFFFFF")
         btn_frame.pack(pady=20)
         
